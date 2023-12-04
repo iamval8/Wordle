@@ -71,10 +71,4 @@ public class WordleGame {
 
         System.out.println("Game Over. The word was: " + targetWord);
     }
-
-    // Main method to run the game
-    public static void main(String[] args) {
-        WordleGame game = new WordleGame("apple"); // Example target word
-        game.playGame();
-    }
 }
