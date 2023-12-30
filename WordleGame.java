@@ -1,74 +1,85 @@
-import java.util.Scanner;
-
-public class WordleGame {
-    private String targetWord; // Word to be guessed
-    private int attempts; // Number of attempts left
-
-    private Scanner scan; // Scanner object for input
+import java.util.*;
+public class WordleGame
+{
+    private String targetWord;
+    private int attempts;
+    private Scanner scan = new Scanner(System.in);
 
     // Constructor
-    public WordleGame(String targetWord) {
-        this.targetWord = targetWord.toLowerCase(); // Ensure target word is in lowercase for consistency
-        this.attempts = 6; // Initialize attempts to 6
-        this.scan = new Scanner(System.in); // Initialize scanner for input
+    public WordleGame(String tWord)
+    {
+        this.targetWord = tWord.toLowerCase();
+        this.attempts = 6;
     }
-
-    // Method to guess the word and get feedback
-    public String guessWord(String guess) {
-        guess = guess.toLowerCase(); // Convert guess to lowercase for comparison
-        if (!isValidGuess(guess)) {
-            return "Invalid guess. Please enter a 5-letter word.";
-        }
-
+    public String guessWord(String guess)
+    {
+        guess = guess.toLowerCase();
         String feedback = "";
-        for (int i = 0; i < guess.length(); i++) {
+        for (int i = 0; i < guess.length(); i++)
+        {
             char letter = guess.charAt(i);
-            if (letter == targetWord.charAt(i)) {
+            if (letter == targetWord.charAt(i))
+            {
                 feedback += "🟩"; // Correct letter and position
-            } else if (targetWord.contains(String.valueOf(letter))) {
+            }
+            else if (targetWord.contains(String.valueOf(letter)))
+            {
                 feedback += "🟨"; // Correct letter, wrong position
-            } else {
+            }
+            else
+            {
                 feedback += "⬜"; // Incorrect letter
             }
         }
-        attempts--;
         return feedback;
     }
 
+
     // Method to check if game is over
-    public boolean isGameOver() {
-        return attempts <= 0;
+    public boolean isGameOver()
+    {
+        return attempts == 0;
     }
 
     // Method to check if word is guessed correctly
-    public boolean isWordGuessed(String guess) {
-        return guess.equalsIgnoreCase(targetWord);
+    public boolean isWordGuessed(String guess)
+    {
+        return guess.equals(targetWord);
     }
 
     // Method to validate the guess
-    private boolean isValidGuess(String guess) {
-        return guess.length() == 5 && guess.matches("[a-zA-Z]+");
+    private boolean isValidGuess(String guess)
+    {
+       return guess.length() == 5 && guess.matches("[a-zA-Z]+");
     }
-
-    // Main game loop
-    public void playGame() {
-
-        while (attempts > 0) {
-            System.out.print("Enter your guess (" + attempts + " attempts left): ");
+    public void playGame()
+    {
+        while (!(this.isGameOver()))
+        {
+            System.out.print("Enter your guess: ");
             String guess = scan.nextLine();
-
-            if (isValidGuess(guess)) {
-                String feedback = guessWord(guess);
-                System.out.println(feedback);
-                if (isWordGuessed(guess)) {
-                    System.out.println("Congratulations! You've guessed the word.");
-                    return;
+            if (this.isValidGuess(guess))
+            {
+                attempts--;
+                System.out.println(guessWord(guess));
+                if (this.isWordGuessed(guess))
+                {
+                    System.out.println("Good job! You guessed the word with " + attempts + " attempts left!");
+                    break;
                 }
-            } else {
-                System.out.println("Invalid guess. Please try a 5-letter word.");
+                else if (!(this.isWordGuessed(guess)))
+                {
+                    System.out.println("That's not it. You have " + attempts + " attempts left.");
+                }
+            }
+            else if (!(this.isValidGuess(guess)))
+            {
+                System.out.println("Guess is invalid. Please try again. ");
             }
         }
-
-        System.out.println("Game Over. The word was: " + targetWord);
+        if (this.isGameOver())
+        {
+            System.out.println("You ran out of tries! Game Over. The word was: " + targetWord + "!");
+        }
     }
 }
